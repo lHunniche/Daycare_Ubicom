@@ -3,8 +3,8 @@ import pandas as pd
 import time
 import random
 
-url = "http://klevang.dk:8080/check?cid="
-filename = 'genchildmovement/child_info.csv'
+url = "http://localhost:8080/check?cid="
+filename = '../genchildmovement/child_info.csv'
 data = pd.read_csv(filename)
 min_sleep = 5
 max_sleep = 20
@@ -28,10 +28,10 @@ def sleep_for_a_day():
     global day_length
     time.sleep(day_length)
 
-def update_child_statuses(_id, child):
+def update_child_statuses(_id):
     global url
-    check_url = url + _id
-    requests.put(check_url, data=data).text
+    check_url = url + str(_id)
+    requests.put(check_url).text
 
 
 def sleep_for_random_amount_of_time():
