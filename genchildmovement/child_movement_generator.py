@@ -6,6 +6,8 @@ import random
 url = "http://localhost:8080/check?cid="
 filename = '../genchildmovement/child_info.csv'
 data = pd.read_csv(filename)
+
+
 min_sleep = 5
 max_sleep = 20
 
