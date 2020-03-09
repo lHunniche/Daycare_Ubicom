@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, make_response
-from Child import Child
+from child import Child
 import csv
 import json
 
