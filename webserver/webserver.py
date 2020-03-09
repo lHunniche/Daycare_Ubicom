@@ -8,15 +8,17 @@ children = []
 
 def init_child_list():
     global children
-    child_csv = open("genchildmovement/child_info.csv", encoding="utf-8")
+    child_csv = open("../genchildmovement/child_info.csv", encoding="utf-8")
     csv_reader = csv.reader(child_csv)
     for row in csv_reader:
         new_child = Child(row[0], row[1], False)
         children.append(new_child)
 
+
 @app.route("/")
 def index():
     return "Hello world!"
+
 
 @app.route("/check", methods=["POST", "GET"])
 def check_child_in():
