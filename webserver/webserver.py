@@ -6,6 +6,11 @@ import json
 app = Flask(__name__)
 children = []
 
+def get_default_response(message):
+    resp = make_response(message)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+
 def init_child_list():
     global children
     child_csv = open("../genchildmovement/child_info.csv", encoding="utf-8")
@@ -27,11 +32,11 @@ def check_child_in():
         if child.id == child_id:
             if child.status:
                 child.status = not child.status
-                return "Checking " + child.name + " out."
+                return get_default_response("Checking " + child.name + " in.")
             else:
                 child.status = not child.status
-                return "Checking " + child.name + " in."
-    return "No child found with that ID..."
+                return get_default_response("Checking " + child.name + " out.")
+    return get_default_response("No child found with that ID...")
 
 
 @app.route("/status", methods=["GET"])
@@ -41,7 +46,7 @@ def daycare_status():
     children_json = {
         "children": children_j
     }
-    return jsonify(children_json), 200
+    return get_default_response(jsonify(children_json))
 
 if __name__ == "__main__":
     init_child_list()
