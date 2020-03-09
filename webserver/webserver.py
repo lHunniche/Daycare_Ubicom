@@ -1,12 +1,12 @@
-from flask import Flask, request, jsonify
-from child import Child
+from flask import Flask, request, jsonify,make_response
+from Child import Child
 import csv, json
 
 app = Flask(__name__)
 children = []
 def init_child_list():
     global children
-    child_csv = open("../genchildmovement/child_info.csv", encoding="utf-8")
+    child_csv = open("genchildmovement/child_info.csv", encoding="utf-8")
     csv_reader = csv.reader(child_csv)
     for row in csv_reader:
         new_child = Child(row[0], row[1], False)
@@ -37,11 +37,13 @@ def check_child_in():
 
 @app.route("/status", methods=["GET"])
 def daycare_status():
-    #dump = json.dumps(children[0])
-    #print(children[0].__dict__)
-    #print(json.JSONEncoder(children))
-    return jsonify({"children": [jsonify(child.__dict__) for child in children]})
-    #return jsonify(children)
+    global children
+    children_j =  [child.__dict__ for child in children]
+    children_json = {
+        "children": children_j
+    }
+    return jsonify(children_json), 200
+ 
 
 if __name__ == "__main__":
     init_child_list()

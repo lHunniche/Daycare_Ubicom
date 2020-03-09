@@ -6,8 +6,10 @@ import random
 url = "http://klevang.dk:8080/check?cid="
 filename = 'genchildmovement/child_info.csv'
 data = pd.read_csv(filename)
-min_sleep = 10
-max_sleep = 50
+min_sleep = 5
+max_sleep = 20
+
+day_length = 80
 
 
 def generate_random_timestamps():
@@ -20,7 +22,11 @@ def generate_random_timestamps():
         }
         update_child_statuses(_id)
         sleep_for_random_amount_of_time()
+    sleep_for_a_day()
 
+def sleep_for_a_day():
+    global day_length
+    time.sleep(day_length)
 
 def update_child_statuses(_id, child):
     global url

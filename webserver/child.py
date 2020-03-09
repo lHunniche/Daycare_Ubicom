@@ -1,4 +1,5 @@
 import json
+from flask import jsonify
 
 class Child:
     def __init__(self, name, id, status, photo=None):
@@ -9,4 +10,5 @@ class Child:
         self.history = []
 
     def __str__(self):
-        return json.dumps(self.__dict__)
+        return str(self.__dict__)
+
