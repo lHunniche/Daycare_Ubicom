@@ -10,7 +10,7 @@ function docReady(fn) {
 
 
 let addKinder = (kid) => {
-    console.log(kid)
+    //console.log(kid)
     let kidContainer = document.getElementById("kid-container")
     let kidElement = createKidElement(kid)
     kidContainer.appendChild(kidElement)
@@ -20,15 +20,29 @@ let createKidElement = (kid) => {
     let kidElement = document.createElement("div")
     let name = document.createTextNode(kid.name)
     let id = document.createTextNode(kid.id)
+    let check = kid.status ? "Checked in at " : "Checked out at "
+    //let timestamp = document.createTextNode(check + getTime())
+    let timestamp = document.createTextNode(check + getTime(kid.last_change))
     let nameSpan = document.createElement("span")
     nameSpan.appendChild(name)
     let idSpan = document.createElement("span")
     idSpan.appendChild(id)
+    let timestampSpan = document.createElement("span")
+    timestampSpan.appendChild(timestamp)
     kidElement = setStatusColor(kid.status, kidElement)
     kidElement.appendChild(nameSpan)
     kidElement.appendChild(idSpan)
+    kidElement.appendChild(timestampSpan)
     kidElement.className = "kid-element"
     return kidElement
+}
+
+let getTime = (timestamp) => {
+    if (timestamp == "") {
+        return "No changes yet"
+    } else {
+        return timestamp
+    }
 }
 
 let setStatusColor = (status, element) => {

@@ -8,19 +8,18 @@ filename = 'genchildmovement/child_info.csv'
 data = pd.read_csv(filename)
 
 
-min_sleep = 2
-max_sleep = 10
+min_sleep = 0.2
+max_sleep = 1
 
-day_length = 30
-
+day_length = 5
 
 def generate_random_timestamps():
     global data
-    data = data.sample(frac=1)
-    for i in range(len(data)):
-        _id = data.loc[i, "id"]
-        name = data.loc[i, "name"]
-        print("updating: ", name)
+    ids = data["id"].tolist()
+    shuf_ids = random.shuffle(ids)
+    print(ids)
+    for _id in ids:
+        print("updating: ", _id)
         update_child_statuses(_id)
         sleep_for_random_amount_of_time()
     sleep_for_a_day()
@@ -38,12 +37,13 @@ def update_child_statuses(_id):
 def sleep_for_random_amount_of_time():
     global min_sleep
     global max_sleep
-    rd = random.randint(min_sleep, max_sleep)
+    rd = random.uniform(min_sleep, max_sleep)
     print("sleeping for: ", rd, " seconds")
     time.sleep(rd)
 
 
 def _run():
+    requests.get("http://klevang.dk:8080/reset").text
     while True:
         generate_random_timestamps()
 
