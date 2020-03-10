@@ -18,7 +18,8 @@ def init_child_list():
     csv_reader = csv.reader(child_csv)
     for row in csv_reader:
         new_child = Child(row[0], row[1], False)
-        children.append(new_child)
+        if new_child.name != "name":
+            children.append(new_child)
 
 
 @app.route("/")
@@ -26,7 +27,7 @@ def index():
     return "Hello world!"
 
 
-@app.route("/check", methods=["POST", "GET"])
+@app.route("/check", methods=["PUT", "GET"])
 def check_child_in():
     global has_update
     child_id = request.args.get("cid")
@@ -61,6 +62,15 @@ def daycare_status():
     }
     has_update = False
     return get_default_response(jsonify(children_json))
+
+
+@app.route("/reset", methods=["GET"])+
+def reset_daycare():
+    global children, has_update
+    for child in children:
+        child.status = False
+    has_update = True
+    return get_default_response("Reset")
 
 if __name__ == "__main__":
     init_child_list()
