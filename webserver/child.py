@@ -6,7 +6,7 @@ class Child:
         self.name = name
         self.id = id
         self.status = status
-        self.last_change = None
+        self.last_change = ""
         self.history = []
 
     def __str__(self):
