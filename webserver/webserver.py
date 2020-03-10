@@ -29,18 +29,14 @@ def index():
 
 @app.route("/check", methods=["PUT", "GET"])
 def check_child_in():
-    global has_update
+    global has_update, children
     child_id = request.args.get("cid")
     for child in children:
         if child.id == child_id:
-            if child.status:
-                child.status = not child.status
-                has_update = True
-                return get_default_response("Checking " + child.name + " out.")
-            else:
-                child.status = not child.status
-                has_update = True
-                return get_default_response("Checking " + child.name + " in.")
+            child.status = not child.status
+            child.history.append(time.time())
+            has_update = True
+            return get_default_response("Status updated for " + child.name)
     return get_default_response("No child found with that ID...")
 
 
