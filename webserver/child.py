@@ -2,11 +2,11 @@ import json
 from flask import jsonify
 
 class Child:
-    def __init__(self, name, id, status, photo=None):
+    def __init__(self, name, id, status):
         self.name = name
         self.id = id
         self.status = status
-        self.photo = photo
+        self.last_change = None
         self.history = []
 
     def __str__(self):
