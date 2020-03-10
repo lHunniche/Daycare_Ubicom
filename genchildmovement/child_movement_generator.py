@@ -8,15 +8,15 @@ filename = 'genchildmovement/child_info.csv'
 data = pd.read_csv(filename)
 
 
-min_sleep = 5
-max_sleep = 20
+min_sleep = 2
+max_sleep = 10
 
-day_length = 80
+day_length = 30
 
 
 def generate_random_timestamps():
     global data
-    print(data)
+    data = data.sample(frac=1)
     for i in range(len(data)):
         _id = data.loc[i, "id"]
         name = data.loc[i, "name"]
