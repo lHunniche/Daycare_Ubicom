@@ -47,10 +47,10 @@ def check_child_in():
 def daycare_status():
     global children, has_update
     wait_counter = 0
-    while not has_update and wait_counter < 60: #one long-polling "session" lasts 1 minute
-        time.sleep(1)
+    while not has_update and wait_counter < 30: #one long-polling "session" lasts 1 minute
+        time.sleep(2)
         wait_counter += 1
-        print("Long polling, and waiting for updates...")
+        print(request.remote_addr, "is Long polling, and waiting for updates...")
     
     if not has_update:
         get_default_response()
