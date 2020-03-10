@@ -64,7 +64,7 @@ def daycare_status():
     return get_default_response(jsonify(children_json))
 
 
-@app.route("/reset", methods=["GET"])+
+@app.route("/reset", methods=["GET"])
 def reset_daycare():
     global children, has_update
     for child in children:
