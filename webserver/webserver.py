@@ -29,8 +29,6 @@ def remove_expired_polling_addresses():
     for poller in polling_addresses:
         if poller[1] > time.time():
             new_pollers.append(poller)
-        else:
-            print("Removed " + poller[0])
     return new_pollers
 
 
@@ -67,7 +65,6 @@ def check_child_in():
 @app.route("/status", methods=["GET"])
 def daycare_status():
     global children, has_update, polling_addresses
-    print(polling_addresses)
     polling_addresses = remove_expired_polling_addresses()
 
     if addr_is_polling(request.remote_addr):
