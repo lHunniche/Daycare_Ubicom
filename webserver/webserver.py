@@ -35,11 +35,11 @@ def check_child_in():
             if child.status:
                 child.status = not child.status
                 has_update = True
-                return get_default_response("Checking " + child.name + " in.")
+                return get_default_response("Checking " + child.name + " out.")
             else:
                 child.status = not child.status
                 has_update = True
-                return get_default_response("Checking " + child.name + " out.")
+                return get_default_response("Checking " + child.name + " in.")
     return get_default_response("No child found with that ID...")
 
 
@@ -47,7 +47,6 @@ def check_child_in():
 def daycare_status():
     global children, has_update
     wait_counter = 0
-    print("Do we have updates? ", has_update)
     while not has_update and wait_counter < 60: #one long-polling "session" lasts 1 minute
         time.sleep(1)
         wait_counter += 1
