@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, make_response
 from child import Child
+from datetime import datetime
 import csv, json, time
 
 app = Flask(__name__)
@@ -33,14 +34,10 @@ def check_child_in():
     child_id = request.args.get("cid")
     for child in children:
         if child.id == child_id:
-            if child.status:
-                child.status = not child.status
-                has_update = True
-                return get_default_response("Checking " + child.name + " out.")
-            else:
-                child.status = not child.status
-                has_update = True
-                return get_default_response("Checking " + child.name + " in.")
+            child.status = not child.status
+            child.last_change = datetime.now().strftime("%d/%m %H:%M:%S")
+            has_update = True
+            return get_default_response("Status updated for " + child.name)
     return get_default_response("No child found with that ID...")
 
 
