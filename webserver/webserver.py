@@ -36,6 +36,7 @@ def check_child_in():
         if child.id == child_id:
             child.status = not child.status
             child.last_change = datetime.now().strftime("%d/%m %H:%M:%S")
+            child.history.append((child.status, child.last_change))
             has_update = True
             return get_default_response("Status updated for " + child.name)
     return get_default_response("No child found with that ID...")
