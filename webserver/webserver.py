@@ -79,7 +79,7 @@ def daycare_status():
                                 # doesn't need to go away from its current page. 
                                 # A 204 response is cacheable by default.
     else:
-        polling_addresses.append((request.remote_addr, time.time()+10))
+        polling_addresses.append((request.remote_addr, time.time()+30))
 
     children_j = [child.__dict__ for child in children]
     children_json = {
