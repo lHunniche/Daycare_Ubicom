@@ -5,12 +5,29 @@ import csv, json, time
 
 app = Flask(__name__)
 children = []
+polling_addresses = []
 has_update = True
 
 def get_default_response(message = ''):
     resp = make_response(message)
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
+
+def addr_is_polling(rem_addr):
+    for element in polling_addresses:
+        if element[0] == rem_addr:
+            return True
+    return False
+
+def remove_expired_polling_addresses():
+    new_pollers = []
+    for poller in polling_addresses:
+        if poller[1] > time.time():
+            new_pollers.append(poller)
+        else:
+            print("Removed " + poller[0])
+    return new_pollers
+
 
 
 def init_child_list():
@@ -44,19 +61,25 @@ def check_child_in():
 
 @app.route("/status", methods=["GET"])
 def daycare_status():
-    global children, has_update
-    wait_counter = 0
-    while wait_counter < 30: #one long-polling "session" lasts 1 minute
-        if has_update:
-            break
-        time.sleep(2)
-        wait_counter += 1
-    
-    if not has_update:
-        return ('', 204)    # The HTTP 204 No Content success status response code indicates
-                            # that the request has succeeded, but that the client 
-                            # doesn't need to go away from its current page. 
-                            # A 204 response is cacheable by default.
+    global children, has_update, polling_addresses
+    print(polling_addresses)
+    polling_addresses = remove_expired_polling_addresses()
+
+    if addr_is_polling(request.remote_addr):
+        wait_counter = 0
+        while wait_counter < 30: #one long-polling "session" lasts 1 minute
+            if has_update:
+                break
+            time.sleep(2)
+            wait_counter += 1
+        
+        if not has_update:
+            return ('', 204)    # The HTTP 204 No Content success status response code indicates
+                                # that the request has succeeded, but that the client 
+                                # doesn't need to go away from its current page. 
+                                # A 204 response is cacheable by default.
+    else:
+        polling_addresses.append((request.remote_addr, time.time()+10))
 
     children_j = [child.__dict__ for child in children]
     children_json = {
