@@ -18,7 +18,8 @@ def init_child_list():
     csv_reader = csv.reader(child_csv)
     for row in csv_reader:
         new_child = Child(row[0], row[1], False)
-        children.append(new_child)
+        if new_child.name != "name":
+            children.append(new_child)
 
 
 @app.route("/")
@@ -26,7 +27,7 @@ def index():
     return "Hello world!"
 
 
-@app.route("/check", methods=["POST", "GET"])
+@app.route("/check", methods=["PUT", "GET"])
 def check_child_in():
     global has_update
     child_id = request.args.get("cid")
@@ -35,11 +36,11 @@ def check_child_in():
             if child.status:
                 child.status = not child.status
                 has_update = True
-                return get_default_response("Checking " + child.name + " in.")
+                return get_default_response("Checking " + child.name + " out.")
             else:
                 child.status = not child.status
                 has_update = True
-                return get_default_response("Checking " + child.name + " out.")
+                return get_default_response("Checking " + child.name + " in.")
     return get_default_response("No child found with that ID...")
 
 
@@ -47,10 +48,10 @@ def check_child_in():
 def daycare_status():
     global children, has_update
     wait_counter = 0
-    while not has_update and wait_counter < 60: #one long-polling "session" lasts 1 minute
-        time.sleep(1)
+    while not has_update and wait_counter < 30: #one long-polling "session" lasts 1 minute
+        time.sleep(2)
         wait_counter += 1
-        print("Long polling, and waiting for updates...")
+        #print(request.remote_addr, "is Long polling, and waiting for updates...")
     
     if not has_update:
         get_default_response()
@@ -61,6 +62,15 @@ def daycare_status():
     }
     has_update = False
     return get_default_response(jsonify(children_json))
+
+
+@app.route("/reset", methods=["GET"])
+def reset_daycare():
+    global children, has_update
+    for child in children:
+        child.status = False
+    has_update = True
+    return get_default_response("Reset")
 
 if __name__ == "__main__":
     init_child_list()
