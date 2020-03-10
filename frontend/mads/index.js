@@ -29,20 +29,32 @@ let createKidElement = (kid) => {
     kidElement.appendChild(idSpan)
     kidElement.className = "kid-element"
     return kidElement
-} 
+}
 
 let setStatusColor = (status, element) => {
-    if(status == false){
+    if (status == false) {
         element.style.backgroundColor = "red"
-    }else {
+    } else {
         element.style.backgroundColor = "green"
     }
     return element
 }
 
-let addAllKids = (allKids) => {
+let clearKids = () => {
+    var e = document.querySelector("#kid-container");
+    if (e.childElementCount > 0) {
+        var child = e.lastElementChild;
+        while (child) {
+            e.removeChild(child);
+            child = e.lastElementChild;
+        }
+    }
 
-    for(kid of allKids) {
+}
+
+let addAllKids = (allKids) => {
+    clearKids()
+    for (kid of allKids) {
         addKinder(kid)
     }
 }
@@ -53,7 +65,15 @@ let fetchKids = () => {
         .then(json => addAllKids(json.children))
 }
 
+let poll = function () {
+    $.ajax({
+        url: "http://klevang.dk:8080/status", success: function (json) {
+            addAllKids(json.children)
+        }, dataType: "json", complete: poll, timeout: 30000
+    });
+}
 
 docReady(function () {
     fetchKids()
+    poll()
 });
