@@ -13,6 +13,11 @@ def get_default_response(message = ''):
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
 
+'''
+A list is maintained, containing all the IPs that are currently polling the webserver.
+IPs that currently poll will be put into a waiting loop, waiting for updates.
+IPs that ARE NOT polling will be served the current list of children, regardless of the variable "has_update"'s state.
+'''
 def addr_is_polling(rem_addr):
     for element in polling_addresses:
         if element[0] == rem_addr:
