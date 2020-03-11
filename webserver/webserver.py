@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify, make_response
 from child import Child
 from datetime import datetime
+from child_movement_generator import _run
 import csv, json, time
 
 app = Flask(__name__)
 children = []
 polling_addresses = []
+poll_restricted_time = 10
 has_update = True
 
 def get_default_response(message = ''):
@@ -35,7 +37,7 @@ def remove_expired_polling_addresses():
 
 def init_child_list():
     global children
-    child_csv = open("../genchildmovement/child_info.csv", encoding="utf-8")
+    child_csv = open("child_info.csv", encoding="utf-8")
     csv_reader = csv.reader(child_csv)
     for row in csv_reader:
         new_child = Child(row[0], row[1], False)
@@ -81,7 +83,7 @@ def daycare_status():
                                 # doesn't need to go away from its current page. 
                                 # A 204 response is cacheable by default.
     else:
-        polling_addresses.append((request.remote_addr, time.time()+30))
+        polling_addresses.append((request.remote_addr, time.time()+poll_restricted_time))
 
     children_j = [child.__dict__ for child in children]
     children_json = {
@@ -97,6 +99,7 @@ def reset_daycare():
     for child in children:
         child.status = False
     has_update = True
+    _run()
     return get_default_response("Reset")
 
 if __name__ == "__main__":

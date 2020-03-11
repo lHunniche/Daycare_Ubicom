@@ -4,7 +4,7 @@ import time
 import random
 
 url = "http://klevang.dk:8080/check?cid="
-filename = 'genchildmovement/child_info.csv'
+filename = 'child_info.csv'
 data = pd.read_csv(filename)
 
 
@@ -47,4 +47,6 @@ def _run():
     while True:
         generate_random_timestamps()
 
-_run()
+
+if __name__ == "__main__":
+    _run()
