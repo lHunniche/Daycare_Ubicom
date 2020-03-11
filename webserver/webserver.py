@@ -65,7 +65,7 @@ def check_child_in():
             child.last_change = datetime.now().strftime("%d/%m %H:%M:%S")
 
             hist_file = open("child_checkin_hist.csv", "a")
-            hist_file.write(str(child.id) + "," + child.last_change + "," + str(child.status))
+            hist_file.write(str(child.id) + "," + child.last_change + "," + str(child.status) + "\n")
             hist_file.close()
 
             has_update = True
@@ -110,6 +110,15 @@ def reset_daycare():
     has_update = True
     run_function_in_new_thread(_run)
     return get_default_response("Reset")
+
+
+@app.route("/stats", methods=["GET"])
+def stats():
+    stats_csv = open("child_checkin_hist.csv", encoding="utf-8")
+    csv_reader = csv.reader(stats_csv)
+    stats_list = list(csv_reader)
+    print(stats_list)
+    return get_default_response(jsonify(stats_list))
 
 if __name__ == "__main__":
     init_child_list()
