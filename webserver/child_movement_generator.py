@@ -2,7 +2,6 @@ import requests
 import pandas as pd
 import time
 import random
-from webserver import is_running_simulation
 
 
 url = "http://localhost:8080/check?cid="
@@ -45,13 +44,10 @@ def sleep_for_random_amount_of_time():
 
 
 def _run():
-    global is_running_simulation
-    if is_running_simulation:
-        return
     #requests.get("http://klevang.dk:8080/reset").text
     for _ in range(2):
         generate_random_timestamps()
-    is_running_simulation = False
+
 
 
 if __name__ == "__main__":
