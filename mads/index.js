@@ -14,7 +14,7 @@ let initChildSimBtn = () => {
     let childBtn = document.getElementById("childBtn")
     childBtn.addEventListener("click", function() {
         $.ajax({
-            url: "http://klevang.dk:8080/status", success: function (result) {
+            url: "http://klevang.dk:8080/reset", success: function (result) {
             }
         });
     })
