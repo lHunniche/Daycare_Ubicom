@@ -15,6 +15,7 @@ let initChildSimBtn = () => {
     childBtn.addEventListener("click", function() {
         $.ajax({
             url: "http://klevang.dk:8080/reset", success: function (result) {
+                console.log(result)
             }
         });
     })
