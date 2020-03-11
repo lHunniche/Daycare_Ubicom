@@ -77,10 +77,10 @@ def daycare_status():
 
     if addr_is_polling(request.remote_addr):
         wait_counter = 0
-        while wait_counter < 30: #one long-polling "session" lasts 1 minute
+        while wait_counter < 60: #one long-polling "session" lasts 1 minute
             if has_update:
                 break
-            time.sleep(2)
+            time.sleep(1)
             wait_counter += 1
         
         if not has_update:

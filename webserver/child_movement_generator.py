@@ -9,18 +9,18 @@ filename = 'child_info.csv'
 data = pd.read_csv(filename)
 
 
-min_sleep = 0.2
-max_sleep = 1
+min_sleep = 2
+max_sleep = 5
 
 day_length = 5
+
+is_simulation_running = False
 
 def generate_random_timestamps():
     global data
     ids = data["id"].tolist()
-    shuf_ids = random.shuffle(ids)
-    #print(ids)
+    random.shuffle(ids)
     for _id in ids:
-        #print("updating: ", _id)
         update_child_statuses(_id)
         sleep_for_random_amount_of_time()
     sleep_for_a_day()
@@ -36,17 +36,20 @@ def update_child_statuses(_id):
 
 
 def sleep_for_random_amount_of_time():
-    global min_sleep
-    global max_sleep
+    global min_sleep, max_sleep
     rd = random.uniform(min_sleep, max_sleep)
-    #print("sleeping for: ", rd, " seconds")
     time.sleep(rd)
 
 
 def _run():
-    #requests.get("http://klevang.dk:8080/reset").text
+    global is_simulation_running
+    if is_simulation_running:
+        return
+
+    is_simulation_running = True
     for _ in range(2):
         generate_random_timestamps()
+    is_simulation_running = False
 
 
 
