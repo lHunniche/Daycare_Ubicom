@@ -9,8 +9,8 @@ filename = 'child_info.csv'
 data = pd.read_csv(filename)
 
 
-min_sleep = 1
-max_sleep = 3
+min_sleep = 2
+max_sleep = 5
 
 day_length = 5
 
