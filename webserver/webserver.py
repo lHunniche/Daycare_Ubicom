@@ -10,6 +10,7 @@ children = []
 polling_addresses = []
 poll_restricted_time = 10
 has_update = True
+is_running_simulation = False
 
 def get_default_response(message = ''):
     resp = make_response(message)
@@ -100,11 +101,12 @@ def daycare_status():
 
 @app.route("/reset", methods=["GET"])
 def reset_daycare():
-    global children, has_update
+    global children, has_update, is_running_simulation
     for child in children:
         child.status = False
     has_update = True
     run_function_in_new_thread(_run)
+    is_running_simulation = True
     return get_default_response("Reset")
 
 if __name__ == "__main__":
