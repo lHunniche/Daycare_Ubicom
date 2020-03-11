@@ -94,6 +94,7 @@ def daycare_status():
     else:
         polling_addresses.append((request.remote_addr, time.time()+poll_restricted_time))
 
+    time.sleep(1)
     children_j = [child.__dict__ for child in children]
     children_json = {
         "children": children_j
