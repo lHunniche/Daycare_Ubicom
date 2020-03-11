@@ -117,7 +117,6 @@ def stats():
     stats_csv = open("child_checkin_hist.csv", encoding="utf-8")
     csv_reader = csv.reader(stats_csv)
     stats_list = list(csv_reader)
-    print(stats_list)
     return get_default_response(jsonify(stats_list))
 
 if __name__ == "__main__":
