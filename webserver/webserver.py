@@ -10,7 +10,6 @@ children = []
 polling_addresses = []
 poll_restricted_time = 10
 has_update = True
-#is_running_simulation = False
 
 def get_default_response(message = ''):
     resp = make_response(message)
@@ -64,7 +63,11 @@ def check_child_in():
         if child.id == child_id:
             child.status = not child.status
             child.last_change = datetime.now().strftime("%d/%m %H:%M:%S")
-            child.history.append((child.status, child.last_change))
+
+            hist_file = open("child_checkin_hist.csv", "a")
+            hist_file.write(child.id + "," + child.last_change + "," + child.status)
+            hist_file.close()
+
             has_update = True
             return get_default_response("Status updated for " + child.name)
     return get_default_response("No child found with that ID...")
