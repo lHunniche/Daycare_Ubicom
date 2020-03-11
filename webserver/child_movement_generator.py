@@ -3,6 +3,7 @@ import pandas as pd
 import time
 import random
 
+
 url = "http://localhost:8080/check?cid="
 filename = 'child_info.csv'
 data = pd.read_csv(filename)
@@ -46,6 +47,7 @@ def _run():
     #requests.get("http://klevang.dk:8080/reset").text
     for _ in range(2):
         generate_random_timestamps()
+
 
 
 if __name__ == "__main__":

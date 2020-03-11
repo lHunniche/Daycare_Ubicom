@@ -10,6 +10,7 @@ children = []
 polling_addresses = []
 poll_restricted_time = 10
 has_update = True
+#is_running_simulation = False
 
 def get_default_response(message = ''):
     resp = make_response(message)
