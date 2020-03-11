@@ -3,7 +3,7 @@ import pandas as pd
 import time
 import random
 
-url = "http://localhost:8080/check?cid="
+url = "http://klevang.dk:8080/check?cid="
 filename = 'child_info.csv'
 data = pd.read_csv(filename)
 
