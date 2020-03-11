@@ -65,7 +65,7 @@ def check_child_in():
             child.last_change = datetime.now().strftime("%d/%m %H:%M:%S")
 
             hist_file = open("child_checkin_hist.csv", "a")
-            hist_file.write(child.id + "," + child.last_change + "," + child.status)
+            hist_file.write(str(child.id) + "," + child.last_change + "," + str(child.status))
             hist_file.close()
 
             has_update = True
