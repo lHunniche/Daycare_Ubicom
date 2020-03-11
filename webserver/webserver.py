@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from child import Child
 from datetime import datetime
+from threading import Thread
 from child_movement_generator import _run
 import csv, json, time
 
@@ -14,6 +15,10 @@ def get_default_response(message = ''):
     resp = make_response(message)
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
+
+def run_function_in_new_thread(some_func):
+    thread = Thread(target = some_func)
+    thread.start()
 
 '''
 A list is maintained, containing all the IPs that are currently polling the webserver.
@@ -99,7 +104,7 @@ def reset_daycare():
     for child in children:
         child.status = False
     has_update = True
-    _run()
+    run_function_in_new_thread(_run)
     return get_default_response("Reset")
 
 if __name__ == "__main__":
