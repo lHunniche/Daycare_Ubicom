@@ -14,6 +14,8 @@ max_sleep = 1
 
 day_length = 5
 
+is_simulation_running = False
+
 def generate_random_timestamps():
     global data
     ids = data["id"].tolist()
@@ -44,9 +46,14 @@ def sleep_for_random_amount_of_time():
 
 
 def _run():
-    #requests.get("http://klevang.dk:8080/reset").text
+    global is_simulation_running
+    if is_simulation_running:
+        return
+
+    is_simulation_running = True
     for _ in range(2):
         generate_random_timestamps()
+    is_simulation_running = False
 
 
 
