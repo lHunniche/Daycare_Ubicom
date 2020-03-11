@@ -8,7 +8,7 @@ import csv, json, time
 app = Flask(__name__)
 children = []
 polling_addresses = []
-poll_restricted_time = 10
+poll_restricted_time = 60
 has_update = True
 
 def get_default_response(message = ''):
