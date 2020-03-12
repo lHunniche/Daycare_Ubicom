@@ -8,9 +8,8 @@ import csv, json, time
 app = Flask(__name__)
 children = []
 polling_addresses = []
-poll_restricted_time = 10
+poll_restricted_time = 60
 has_update = True
-#is_running_simulation = False
 
 def get_default_response(message = ''):
     resp = make_response(message)
@@ -64,7 +63,11 @@ def check_child_in():
         if child.id == child_id:
             child.status = not child.status
             child.last_change = datetime.now().strftime("%d/%m %H:%M:%S")
-            child.history.append((child.status, child.last_change))
+
+            hist_file = open("child_checkin_hist.csv", "a")
+            hist_file.write(str(child.id) + "," + child.last_change + "," + str(child.status) + "\n")
+            hist_file.close()
+
             has_update = True
             return get_default_response("Status updated for " + child.name)
     return get_default_response("No child found with that ID...")
@@ -91,6 +94,7 @@ def daycare_status():
     else:
         polling_addresses.append((request.remote_addr, time.time()+poll_restricted_time))
 
+    time.sleep(1)
     children_j = [child.__dict__ for child in children]
     children_json = {
         "children": children_j
@@ -107,6 +111,14 @@ def reset_daycare():
     has_update = True
     run_function_in_new_thread(_run)
     return get_default_response("Reset")
+
+
+@app.route("/stats", methods=["GET"])
+def stats():
+    stats_csv = open("child_checkin_hist.csv", encoding="utf-8")
+    csv_reader = csv.reader(stats_csv)
+    stats_list = list(csv_reader)
+    return get_default_response(jsonify(stats_list))
 
 if __name__ == "__main__":
     init_child_list()
