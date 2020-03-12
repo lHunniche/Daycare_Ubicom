@@ -1,4 +1,4 @@
-import vegaEmbed from 'vega-embed'
+const barcharts = require('./barchart.js')
 
 
 function docReady(fn) {
@@ -9,7 +9,7 @@ function docReady(fn) {
     }
 }
 
-let initBtnListener = () => {
+let initBtnListeners = () => {
     initChildSimBtn()
 }
 
@@ -48,7 +48,6 @@ let createElementAndAppend = (text,elementTag,parent) => {
     parent.appendChild(element)
 }
 
-
 let getTime = (timestamp) => {
     if (timestamp == "") {
         return "No changes yet"
@@ -75,7 +74,6 @@ let clearKids = () => {
             child = e.lastElementChild;
         }
     }
-
 }
 
 let addAllKids = (allKids) => {
@@ -91,16 +89,40 @@ let fetchKids = () => {
         .then(json => addAllKids(json.children))
 }
 
-let poll = function () {
+let updateStats = (history) => {
+    console.log(history)
+    barcharts.setStats(history)
+}
+
+let pollKids = function () {
     $.ajax({
         url: "http://klevang.dk:8080/status", success: function (json) {
             addAllKids(json.children)
-        }, dataType: "json", complete: poll, timeout: 30000
+        }, dataType: "json", complete: pollKids, timeout: 30000
     });
 }
 
+let pollStats = () => {
+    $.ajax({
+        url: "http://klevang.dk:8080/stats", success: function (history) {
+            updateStats(history)
+        }, dataType: "json", complete: pollStats, timeout: 30000
+    });
+}
+
+let initStats = () => {
+    fetch('http://klevang.dk:8080/stats')
+        .then(response => response.json())
+        .then(history => console.log(history))
+}
+
+
+
 docReady(function () {
-    initBtnListener()
+    initBtnListeners()
     fetchKids()
-    poll()
+    initStats()
+    pollKids()
+    //pollStats()
+    //barcharts.setStats()
 });
